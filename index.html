@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="shortcut icon" href="favicon.ico">
-<title>家長接送登記</title>
+<title>嘉豐非營利幼兒園-家長接送登記</title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/font-awesome.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/zzsc.css">
@@ -28,39 +28,39 @@
      var strUrl = location.search;
             var YourLocation;
             if (strUrl.indexOf("?") != -1) {
-                YourSerialNumber = strUrl.split("?")[1].split("=")[1];
-				switch (YourSerialNumber) {
-    case '01':
-       YourSerialNumber='Molly';
-        break;
-    case '02':
-        YourSerialNumber='Shock';
-		 break;
-}
-				send(YourSerialNumber);	
+			
+                YourClass = decodeURI(strUrl.split("?")[1].split("&")[0].split("=")[1]);
+				YourSerialNumber = decodeURI(strUrl.split("?")[1].split("&")[1].split("=")[1]);
+				send(YourClass,YourSerialNumber);	
 			}else{
 			swal("掃描失敗", "請再重新掃描QRCODE!!", "error");
 			}
-function send(sn) {
+function send(cls, sn) {
   
     $.ajax({
-    //url: "https://script.google.com/macros/s/AKfycby6Jaa3wrbIXET0CvzhZEURpIXYmbez0P1BNC_EJf3auRgYLkY/exec",
 	url:"https://script.google.com/macros/s/AKfycbyXVsjvgqMkHGRUKmzw7xq7VkAAaWT3DXQ45vpbAyUcKi_WM18/exec",
     data: {
         "emplyid": sn,
-        "location": '',
+        "location": cls,
 		"locationNM": ''
     },
     success: function(response) {
       if(response == "成功"){
 	  const d = new Date();
-		swal(sn, d.getHours()+':'+d.getMinutes()+"  下課", "success");
+		swal(sn, d.getHours()+':'+padLeft(d.getMinutes(),2)+"  下課", "success");
       }
     },
   });
 
  
 };
+
+function padLeft(str,lenght){
+if(str.length >= lenght)
+return str;
+else
+return padLeft("0" +str,lenght);
+}
 
 </script>
 </body>
