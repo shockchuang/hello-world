@@ -21,28 +21,24 @@
 </div>
 
 <script>
-
-//swal("操作成功", "恭喜你，成功登陆站长素材（sc.chinaz.com）", "success");
-
-
      var strUrl = location.search;
             var YourLocation;
             if (strUrl.indexOf("?") != -1) {
-			
-                YourClass = decodeURI(strUrl.split("?")[1].split("&")[0].split("=")[1]);
-				YourSerialNumber = decodeURI(strUrl.split("?")[1].split("&")[1].split("=")[1]);
-				send(YourClass,YourSerialNumber);	
+			    YourNo = decodeURI(strUrl.split("?")[1].split("&")[0].split("=")[1]);
+                YourClass = decodeURI(strUrl.split("?")[1].split("&")[1].split("=")[1]);
+				YourSerialNumber = decodeURI(strUrl.split("?")[1].split("&")[2].split("=")[1]);
+				send(YourNo,YourClass,YourSerialNumber);	
 			}else{
 			swal("掃描失敗", "請再重新掃描QRCODE!!", "error");
 			}
-function send(cls, sn) {
+function send(no, cls, sn) {
   
     $.ajax({
 	url:"https://script.google.com/macros/s/AKfycbyXVsjvgqMkHGRUKmzw7xq7VkAAaWT3DXQ45vpbAyUcKi_WM18/exec",
     data: {
-        "emplyid": sn,
-        "location": cls,
-		"locationNM": ''
+        "emplyid": no,
+        "location": sn,
+		"locationNM": cls
     },
     success: function(response) {
       if(response == "成功"){
