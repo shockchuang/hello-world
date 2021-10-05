@@ -47,7 +47,7 @@ function send(cls, sn) {
     success: function(response) {
       if(response == "成功"){
 	  const d = new Date();
-		swal(sn, d.getHours()+':'+padLeft(d.getMinutes(),2)+"  下課", "success");
+		swal(sn, d.getHours()+':'+d.getMinutes()+"  下課", "success");
       }
     },
   });
