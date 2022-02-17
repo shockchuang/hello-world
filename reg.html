@@ -16,7 +16,7 @@ $(window).load(function() {
 </head>
 
 <body>
-<div class="w">
+<div class="w"> 
   <!--页面加载 开始-->
   <div id="preloader">
     <div id="status">
@@ -26,39 +26,44 @@ $(window).load(function() {
   <!--页面加载 结束--> 
   <!--header 开始-->
   <header>
-    <div class="header"> <a class="new-a-back" href="javascript:history.back();"> <span>返回</span> </a>
-      <h2>登录</h2>
-      <a class="new-a-jd" id="trigger-overlay" href="javascript:void(0)"> <span>导航菜单</span> </a>
-      </div>
+    <div class="header"> 
+    <a class="new-a-back" href="javascript:history.back();"> <span>返回</span> </a>
+      <h2>注册</h2>
+    <a class="new-a-jd" id="trigger-overlay" href="javascript:void(0)"> <span>导航菜单</span> </a> 
+    </div>
   </header>
   <!--header 结束-->
   <div class="page">
     <div class="main">
       <form id="frm_login" method="post" action="">
         <div class="item item-username">
-          <input id="username" class="txt-input txt-username" type="text" placeholder="请输入用户名/邮箱/手机号" value="" name="username">
+          <input id="username" class="txt-input txt-username" type="text" placeholder="常用手机号" value="" name="username">
           <b class="input-close" style="display: none;"></b> </div>
+        <div class="item item-username">
+          <input id="username" class="txt-input txt-username" type="text" placeholder="请输入邮箱" value="" name="username">
+          <b class="input-close" style="display:none;"></b> </div>
         <div class="item item-password">
           <input id="password" class="txt-input txt-password ciphertext" type="password" placeholder="请输入密码" name="password" style="display: inline;">
           <input id="ptext" class="txt-input txt-password plaintext" type="text" placeholder="请输入密码" style="display: none;" name="ptext">
           <b class="tp-btn btn-off"></b> </div>
-        <div class="item item-login-option"> <span class="retrieve-password"> <a class="" href="#"> 找回密码</a> </span>
-          <div class="clr"></div>
+        <div class="item item-password">
+          <input id="password_PwdTwo" class="txt-input txt-password_PwdTwo ciphertext_PwdTwo" type="password" placeholder="确认密码" name="password_PwdTwo" style="display: inline;">
+          <input id="ptext_PwdTwo" class="txt-input txt-password_PwdTwo plaintext_PwdTwo" type="text" placeholder="确认密码" style="display: none;" name="ptext_PwdTwo">
+          <b class="tp-btn_PwdTwo btn-off_PwdTwo"></b> </div>
+        <div class="item item-captcha">
+          <div class="input-info">
+            <input id="validateCode" class="txt-input txt-captcha" type="text" placeholder="验证码" autocomplete="off" maxlength="6" size="11">
+            <b id="validateCodeclose" class="input-close" onclick="validateCodeclose();" style="display: block;"></b> <span id="captcha-img"> <img id="code" src="skin/images/code.jpg" style="width:63px;height:25px;" onclick="closeAndFlush();"> </span> </div>
+          <div class="err-tips"> 注册即视为同意 <a target="_blank" href="#">用户服务协议</a> </div>
         </div>
-        <div class="ui-btn-wrap"> <a class="ui-btn-lg ui-btn-primary" href="#">用户登录</a> </div>
-        <div class="ui-btn-wrap"> <a class="ui-btn-lg ui-btn-danger" href="reg.html">没有账号？立即注册</a> </div>
-        <div class="item item-login-other">
-          <dl>
-            <dt>其它登录方式</dt>
-            <dd> <a class="qq" href="#"> <span><img alt="" src="skin/images/login_qq.png" width="40" height="40"></span> </a> <a class="weibo" href="#"> <span><img alt="" src="skin/images/login_wb.png" width="40" height="40"></span> </a> </dd>
-          </dl>
-        </div>
+        <div class="ui-btn-wrap"> <a class="ui-btn-lg ui-btn-primary" href="#">用户注册</a> </div>
       </form>
     </div>
     <script type="text/javascript" >
     $(function() {
 		$(".input-close").hide();
 		displayPwd();
+		displayPwd_PwdTwo();
 		remember();
 		showActionError();
 		autoHeight_login();
@@ -75,10 +80,8 @@ $(window).load(function() {
 		if(document.getElementById("password").value != ''){
 			$(".ciphertext").siblings(".input-close").show();
 		}
-		if($("#codeLevel").val()!="" && $("#codeLevel").val()!='0'){
-			if($("#validateCode").val()!=""){
-				$("#validateCode").siblings(".input-close").show();
-			}
+		if(document.getElementById("password_PwdTwo").value != ''){
+			$(".ciphertext_PwdTwo").siblings(".input-close").show();
 		}
 	}
 
@@ -91,12 +94,19 @@ $(window).load(function() {
 				$("#password").val('');
 				$("#ptext").val('');
 			}
+			if(this.id=="ptext_PwdTwo" || this.id=="password_PwdTwo"){
+				$("#password_PwdTwo").val('');
+				$("#ptext_PwdTwo").val('');
+			}
          });
     });  
 	
 	//设置password字段的值	
 	$('.txt-password').bind('input',function(){
 		$('#password').val($(this).val());
+	});
+	$('.txt-password_PwdTwo').bind('input',function(){
+		$('#password_PwdTwo').val($(this).val());
 	});
 	
 	//显隐密码切换
@@ -111,28 +121,33 @@ $(window).load(function() {
           },
           function(){
 		  	$(this).removeClass("btn-on");
-		  	var textInput = $(this).siblings(".plaintext ");
+		  	var textInput = $(this).siblings(".plaintext");
     		var pwdInput = $(this).siblings(".ciphertext");
             textInput.hide();
 			pwdInput.val(textInput.val()).show().focusEnd();
           }
     	);
 	}
-	
-	//一个月免登陆切换
-	function remember(){
-    	$("#rememberMe").toggle(
+	//显隐密码切换
+	function displayPwd_PwdTwo(){
+    	$(".tp-btn_PwdTwo").toggle(
           function(){
-            $(this).removeClass("login-free-selected");
-			 $('#remember').val("false");
+            $(this).addClass("btn-on_PwdTwo");
+			var textInput = $(this).siblings(".plaintext_PwdTwo");
+    		var pwdInput = $(this).siblings(".ciphertext_PwdTwo");
+			pwdInput.hide();
+			textInput.val(pwdInput.val()).show().focusEnd();
           },
           function(){
-		  	$(this).addClass("login-free-selected");
-		  	 $('#remember').val("true");
+		  	$(this).removeClass("btn-on_PwdTwo");
+		  	var textInput = $(this).siblings(".plaintext_PwdTwo");
+    		var pwdInput = $(this).siblings(".ciphertext_PwdTwo");
+            textInput.hide();
+			pwdInput.val(textInput.val()).show().focusEnd();
           }
     	);
 	}
-
+	
 	//监控用户输入
 	$(":input").bind('input propertychange', function() {
 		if($(this).val()!=""){
@@ -163,7 +178,7 @@ $(window).load(function() {
       </ul>
     </nav>
   </div>
-  <!--footer end-->
+  <!--footer end--> 
 </div>
 </body>
 </html>
